@@ -22,7 +22,5 @@ object MusiciansModule {
         .build()
         .create(MusicianApiService::class.java)
 
-    @Singleton
-    @Provides
-    fun provideRepository() :MusicianRepository = MusicianRepository(provideMusicianApiService())
+
 }
