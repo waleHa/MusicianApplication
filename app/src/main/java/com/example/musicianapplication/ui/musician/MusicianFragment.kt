@@ -6,22 +6,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.musicianapplication.R
+import com.example.musicianapplication.core.ApiResponse
 import com.example.musicianapplication.databinding.FragmentMusicianBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MusicianFragment : Fragment() {
-    val viewModel : MusicianViewModel by viewModels()
-    lateinit var binding:FragmentMusicianBinding
+    val viewModel: MusicianViewModel by viewModels()
+    lateinit var binding: FragmentMusicianBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentMusicianBinding.inflate(inflater,container, false)
+        binding = FragmentMusicianBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -38,19 +38,20 @@ class MusicianFragment : Fragment() {
 
     private fun observer(adapter: MusicianAdapter) {
         val TAG = "TAG: MusicianFragment"
-        viewModel.musicianListSuccess.observe(viewLifecycleOwner){
-            Log.i(TAG,it.toString())
-            adapter.submitList(requireNotNull(it.musicianItemRemoteModels))
-        }
-        viewModel.musicianListError.observe(viewLifecycleOwner){
-            Log.e(TAG,it.toString())
-        }
-        viewModel.loading.observe(viewLifecycleOwner){
-            if (it == true){
-                binding.progressBarMusician.visibility = View.VISIBLE
-            }else{
+
+        viewModel.musicianListResponse.observe(viewLifecycleOwner){
+        when(it){
+            is ApiResponse.SuccessState -> {
                 binding.progressBarMusician.visibility = View.GONE
+                adapter.submitList(requireNotNull(it.data.musicianItemResponseModels))
             }
+            is ApiResponse.ErrorState -> {
+                binding.progressBarMusician.visibility = View.GONE
+                Toast.makeText(requireActivity(),it.message,Toast.LENGTH_LONG).show()
+            }
+            ApiResponse.Loading -> binding.progressBarMusician.visibility = View.VISIBLE
         }
+        }
+
     }
 }

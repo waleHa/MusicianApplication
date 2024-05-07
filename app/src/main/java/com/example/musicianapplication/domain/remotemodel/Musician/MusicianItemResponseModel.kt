@@ -3,7 +3,7 @@ package com.example.musicianapplication.domain.remotemodel.Musician
 
 import com.google.gson.annotations.SerializedName
 
-data class MusicianItemRemoteModel(
+data class MusicianItemResponseModel(
     @SerializedName("artistId")
     val artistId: Int? = 0,
     @SerializedName("artistName")

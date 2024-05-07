@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.musicianapplication.R
 import com.example.musicianapplication.databinding.ItemMusicianBinding
-import com.example.musicianapplication.domain.remotemodel.Musician.MusicianItemRemoteModel
+import com.example.musicianapplication.domain.remotemodel.Musician.MusicianItemResponseModel
 
-class MusicianAdapter : ListAdapter<MusicianItemRemoteModel, MusicianAdapter.MusicianViewHolder>(DiffCallBack) {
+class MusicianAdapter : ListAdapter<MusicianItemResponseModel, MusicianAdapter.MusicianViewHolder>(DiffCallBack) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicianViewHolder {
         val binding = ItemMusicianBinding.inflate(LayoutInflater.from(parent.context))
@@ -23,7 +23,7 @@ class MusicianAdapter : ListAdapter<MusicianItemRemoteModel, MusicianAdapter.Mus
 
     class MusicianViewHolder(private val binding: ItemMusicianBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bing(item: MusicianItemRemoteModel) {
+        fun bing(item: MusicianItemResponseModel) {
             binding.textViewName.text = item.artistName
             Glide.with(binding.imageViewMusician.context)
                 .load(item.artworkUrl100)
@@ -33,15 +33,15 @@ class MusicianAdapter : ListAdapter<MusicianItemRemoteModel, MusicianAdapter.Mus
     }
 
     companion object{
-        private val DiffCallBack = object : DiffUtil.ItemCallback<MusicianItemRemoteModel>(){
+        private val DiffCallBack = object : DiffUtil.ItemCallback<MusicianItemResponseModel>(){
             override fun areItemsTheSame(
-                oldItem: MusicianItemRemoteModel,
-                newItem: MusicianItemRemoteModel
+                oldItem: MusicianItemResponseModel,
+                newItem: MusicianItemResponseModel
             ) = oldItem.isStreamable == newItem.isStreamable
 
             override fun areContentsTheSame(
-                oldItem: MusicianItemRemoteModel,
-                newItem: MusicianItemRemoteModel
+                oldItem: MusicianItemResponseModel,
+                newItem: MusicianItemResponseModel
             ) = oldItem == newItem
         }
     }
